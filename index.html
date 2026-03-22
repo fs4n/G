@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Download Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0d1420;
+    --card: #111827;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --gold: #f5a623;
+    --text: #e8f0fe;
+    --muted: #6b7fa3;
+    --glow: 0 0 40px rgba(0,212,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0,102,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(0,212,255,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    animation: aurora 15s ease infinite alternate;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  @keyframes aurora {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(5deg) scale(1.1); }
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb1 { width: 300px; height: 300px; background: rgba(0,102,255,0.12); top: 10%; left: 5%; animation-delay: 0s; }
+  .orb2 { width: 200px; height: 200px; background: rgba(0,212,255,0.1); bottom: 20%; right: 10%; animation-delay: -4s; }
+  .orb3 { width: 150px; height: 150px; background: rgba(245,166,35,0.06); top: 50%; left: 50%; animation-delay: -2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-30px); }
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 560px;
+    padding: 24px;
+    animation: pageIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Top badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  .badge .dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  /* Main card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), var(--glow);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+    opacity: 0.6;
+  }
+
+  /* App icon */
+  .app-icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .app-icon {
+    width: 88px;
+    height: 88px;
+    background: linear-gradient(135deg, #0d1f3c, #1a3a6e);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0,102,255,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .app-icon svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .app-icon::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 23px;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(0,212,255,0.3), transparent) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
+
+  /* App info */
+  .app-name {
+    font-size: 26px;
+    font-weight: 900;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .app-version {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .app-version span {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Stats row */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .stat {
+    background: rgba(255,255,255,0.02);
+    padding: 14px 10px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .stat:hover { background: rgba(0,212,255,0.04); }
+
+  .stat-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Features */
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #a8b8d8;
+    transition: all 0.2s;
+    animation: featureIn 0.5s both;
+  }
+
+  .feature:nth-child(1) { animation-delay: 0.2s; }
+  .feature:nth-child(2) { animation-delay: 0.3s; }
+  .feature:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes featureIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .feature:hover {
+    background: rgba(0,212,255,0.05);
+    border-color: rgba(0,212,255,0.15);
+    color: var(--text);
+  }
+
+  .feature-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,102,255,0.1));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+  }
+
+  /* Download button */
+  .btn-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 8px 32px rgba(0,102,255,0.35);
+    letter-spacing: 0.3px;
+  }
+
+  .btn-download::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #fff2, transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0,102,255,0.45);
+  }
+
+  .btn-download:hover::before { opacity: 1; }
+
+  .btn-download:active { transform: translateY(0); }
+
+  /* Download animation state */
+  .btn-download.downloading {
+    background: linear-gradient(135deg, #1a3a6e, #0d2040);
+    box-shadow: 0 8px 32px rgba(0,212,255,0.2);
+    pointer-events: none;
+  }
+
+  .btn-icon {
+    width: 22px; height: 22px;
+    transition: transform 0.3s;
+  }
+
+  .btn-download:hover .btn-icon { transform: translateY(2px); }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-top: 16px;
+    display: none;
+  }
+
+  .progress-wrap.show { display: block; }
+
+  .progress-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 100px;
+    transition: width 0.3s;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { filter: brightness(1); }
+    50%  { filter: brightness(1.4); }
+    100% { filter: brightness(1); }
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Footer note */
+  .secure-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .secure-note svg { width: 13px; height: 13px; opacity: 0.6; }
+
+  /* Success state */
+  .success-msg {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: rgba(0,200,100,0.08);
+    border: 1px solid rgba(0,200,100,0.2);
+    border-radius: 12px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: #4ade80;
+    animation: fadeIn 0.4s both;
+  }
+
+  .success-msg.show { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Bottom label */
+  .bottom-label {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(107,127,163,0.5);
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrapper">
+  <div style="text-align:center">
+    <div class="badge">
+      <span class="dot"></span>
+      NOW AVAILABLE
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="app-icon-wrap">
+      <div class="app-icon">
+        <!-- App icon SVG -->
+        <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="6" width="32" height="32" rx="8" fill="url(#iconGrad)" opacity="0.15"/>
+          <path d="M22 10L22 28M22 28L15 21M22 28L29 21" stroke="url(#strokeGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 34H34" stroke="url(#strokeGrad)" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="iconGrad" x1="6" y1="6" x2="38" y2="38">
+              <stop stop-color="#0066ff"/>
+              <stop offset="1" stop-color="#00d4ff"/>
+            </linearGradient>
+            <linearGradient id="strokeGrad" x1="10" y1="10" x2="34" y2="34">
+              <stop stop-color="#00d4ff"/>
+              <stop offset="1" stop-color="#0066ff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <div class="app-name">Setup Installer</div>
+    <div class="app-version">Version <span>1.0.0</span> — Windows</div>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value">EXE</span>
+        <span class="stat-label">Format</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">Windows</span>
+        <span class="stat-label">Platform</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">Free</span>
+        <span class="stat-label">License</span>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        Fast & easy installation
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        Safe and trusted file
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔄</div>
+        Regular updates included
+      </div>
+    </div>
+
+    <a
+      id="dlBtn"
+      class="btn-download"
+      href="https://github.com/Hof6/R/raw/refs/heads/main/Setup.exe"
+      download="Setup.exe"
+      onclick="startDownload()"
+    >
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v13M5 10l7 7 7-7"/><line x1="3" y1="21" x2="21" y2="21"/>
+      </svg>
+      <span id="btnText">Download Now</span>
+    </a>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-text">
+        <span>Downloading...</span>
+        <span id="progressPct">0%</span>
+      </div>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Download started successfully!
+    </div>
+
+    <div class="secure-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Direct & secure download link
+    </div>
+  </div>
+
+  <div class="bottom-label">Setup.exe — github.com/Hof6/R</div>
+</div>
+
+<script>
+  // Simulates a visual download progress animation for UX feedback
+  function startDownload() {
+    const wrap = document.getElementById('progressWrap');
+    const fill = document.getElementById('progressFill');
+    const pct  = document.getElementById('progressPct');
+    const btn  = document.getElementById('dlBtn');
+    const msg  = document.getElementById('successMsg');
+    const txt  = document.getElementById('btnText');
+
+    // Show progress bar and switch button to loading state
+    wrap.classList.add('show');
+    btn.classList.add('downloading');
+    txt.textContent = 'Downloading...';
+
+    let progress = 0;
+
+    // Animate progress bar from 0 to 100 over ~2.5 seconds
+    const interval = setInterval(() => {
+      progress += Math.random() * 15 + 5;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+
+        // Show success state after progress completes
+        setTimeout(() => {
+          fill.style.width = '100%';
+          pct.textContent = '100%';
+          msg.classList.add('show');
+          btn.classList.remove('downloading');
+          txt.textContent = 'Downloaded ✓';
+          btn.style.background = 'linear-gradient(135deg, #065f46, #047857)';
+          btn.style.boxShadow = '0 8px 32px rgba(0,200,100,0.3)';
+        }, 200);
+      }
+
+      fill.style.width = progress + '%';
+      pct.textContent = Math.round(progress) + '%';
+    }, 200);
+  }
+</script>
+</body>
+</html>
